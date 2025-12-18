@@ -62,7 +62,21 @@ function action_svg()
   
   local wifi_data = string.format("WIFI:T:%s;S:%s;P:%s;;", auth, sid, key or "")
   
-  -- Try to use qrencode if available
+  -- Try luci-lib-uqr first (pure Lua)
+  local ok, uqr = pcall(require, "luci.lib.uqr")
+  if ok and uqr then
+    local success, qr_matrix = pcall(uqr.encode, wifi_data)
+    if success and qr_matrix then
+      local svg_data = uqr.svg(qr_matrix, 4)
+      if svg_data then
+        http.prepare_content("image/svg+xml")
+        http.write(svg_data)
+        return
+      end
+    end
+  end
+  
+  -- Fallback to qrencode binary
   local qrencode_cmd = io.popen('echo "' .. wifi_data .. '" | qrencode -t SVG -m 0 -s 8 -o - 2>/dev/null')
   if qrencode_cmd then
     local svg_data = qrencode_cmd:read("*a")
@@ -75,7 +89,7 @@ function action_svg()
     end
   end
   
-  -- Fallback: create simple SVG if qrencode is not available
+  -- Final fallback: simple SVG
   local fallback_svg = [[
 <svg xmlns="http://www.w3.org/2000/svg" width="320" height="320" viewBox="0 0 320 320">
   <rect width="320" height="320" fill="white"/>
@@ -83,7 +97,7 @@ function action_svg()
     QR Code for: ]] .. sid .. [[
   </text>
   <text x="160" y="180" text-anchor="middle" font-family="Arial" font-size="12" fill="gray">
-    (Install qrencode for real QR codes)
+    (Install luci-lib-uqr or qrencode)
   </text>
 </svg>
 ]]

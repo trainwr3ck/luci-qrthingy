@@ -7,6 +7,7 @@ A modern LuCI module that generates QR codes for WiFi networks, allowing easy sh
 ## Features
 
 - **Modern Card-Based UI** - Clean, professional interface with responsive design
+- **Pure Lua QR Generation** - Uses luci-lib-uqr for fast, reliable QR codes without external dependencies
 - **Multi-page Interface** - Network list with individual QR pages per SSID
 - **Native LuCI Integration** - Full menu bar with working dropdown navigation and seamless theme integration
 - **Security Badges** - Color-coded WPA/WEP/Open indicators for easy identification
@@ -14,7 +15,7 @@ A modern LuCI module that generates QR codes for WiFi networks, allowing easy sh
 - **Toast Notifications** - Elegant feedback for user actions
 - **Password Management** - Show/hide and copy password functionality with smooth animations
 - **Dark Mode Support** - Automatic theme detection and styling
-- **Error Handling** - Graceful fallbacks and retry options
+- **Robust Fallbacks** - luci-lib-uqr → qrencode → SVG fallback chain
 - **Security Focused** - Admin-only access, CSP headers, input validation
 - **Performance Optimized** - 30-second network data caching
 - **Network Deduplication** - Shows unique networks only (by SSID + password)
@@ -34,15 +35,18 @@ A modern LuCI module that generates QR codes for WiFi networks, allowing easy sh
 - "Active WiFi AP interfaces" configured in '/etc/config/wireless'
 
 ### Optional (recommended)
-- "qrencode package" for real QR code generation: 'opkg install qrencode'
-  - Without this, fallback SVG with network info is shown
+- "luci-lib-uqr package" for pure Lua QR generation: 'opkg install luci-lib-uqr'
+- "qrencode package" as fallback: 'opkg install qrencode'
+  - Without either, fallback SVG with network info is shown
 
 ## Installation
 
 1. "Install LuCI" (if not present):
    opkg update && opkg install luci
 
-2. "Install qrencode" (recommended):
+2. "Install QR library" (recommended):
+   opkg install luci-lib-uqr
+   # OR as fallback:
    opkg install qrencode
 
 3. "Copy files" to router:
@@ -85,7 +89,8 @@ A modern LuCI module that generates QR codes for WiFi networks, allowing easy sh
 ## Troubleshooting
 
 ### No QR codes appear
-- Install qrencode: 'opkg install qrencode'
+- Install luci-lib-uqr: 'opkg install luci-lib-uqr'
+- Or install qrencode: 'opkg install qrencode'
 - Check '/var/log/messages' for errors
 
 ### "QR code failed to load" message appears with working QR code

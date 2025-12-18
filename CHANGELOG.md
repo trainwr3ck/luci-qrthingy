@@ -144,6 +144,24 @@ All notable changes to LuCI QR Thingy will be documented in this file.
 - **Configuration Documentation** - SSID/password customization steps
 - **Usage Examples** - Public access URLs and feature descriptions
 
+## [0.5.0] - 2025-12-17
+
+### Added
+- **luci-lib-uqr Integration** - Pure Lua QR code generation as primary method
+- **Improved Fallback Chain** - luci-lib-uqr → qrencode → SVG fallback
+- **Better Performance** - No shell execution overhead with pure Lua
+- **Enhanced Reliability** - Reduced dependency on external binaries
+
+### Changed
+- **QR Generation Priority** - luci-lib-uqr now preferred over qrencode
+- **Installation Instructions** - Updated to recommend luci-lib-uqr first
+- **Error Messages** - Updated fallback text to mention both options
+
+### Technical Improvements
+- Pure Lua implementation eliminates shell command execution
+- Graceful error handling with pcall for library loading
+- Consistent QR generation across main module and guest scripts
+
 ### Files
 - `luci/controller/admin/wifi_qr.lua` - Main controller with routing and logic
 - `luci/view/admin_wifi_qr.htm` - Network list page template
