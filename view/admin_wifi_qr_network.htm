@@ -1,0 +1,140 @@
+<%
+local http = require "luci.http"
+local uci = require "luci.model.uci".cursor()
+local ssid = http.formvalue("ssid")
+
+if not ssid then
+  http.redirect("/cgi-bin/luci/admin/network/wifi_qr/")
+  return
+end
+
+local network = nil
+uci:foreach("wireless", "wifi-iface", function(s)
+  if s.ssid == ssid and (s.mode == "ap" or s.mode == nil) then
+    network = {ssid = s.ssid, encryption = s.encryption or "none", key = s.key or ""}
+    return false
+  end
+end)
+
+if not network then
+  http.redirect("/cgi-bin/luci/admin/network/wifi_qr/")
+  return
+end
+%>
+<%+header%>
+<style>
+.qr-container { text-align: center; margin: 30px 0; }
+.qr-image { width: 200px; height: 200px; border: 1px solid #ddd; padding: 10px; background: #fff; border-radius: 8px; }
+.qr-error { max-width: 320px; margin: 0 auto; padding: 20px; text-align: center; display: none; }
+.network-info { margin: 20px 0; }
+.password-controls { margin: 10px 0; }
+.password-field { font-family: monospace; font-weight: bold; font-size: 1.1em; }
+@media (max-width: 768px) { .qr-image { width: 150px; height: 150px; } }
+</style>
+<div class="cbi-map">
+<fieldset class="cbi-section">
+<h2>Connect to <%=network.ssid%></h2>
+<div class="cbi-section-node">
+
+<div style="text-align:right;margin-bottom:20px">
+<a href="/cgi-bin/luci/admin/network/wifi_qr/" class="btn cbi-button">← Back to Networks</a>
+</div>
+
+<div class="qr-container">
+<img id="qr-img" class="qr-image" src="/cgi-bin/luci/admin/network/wifi_qr/svg?ssid=<%=luci.util.urlencode(network.ssid)%>&key=<%=luci.util.urlencode(network.key or "")%>&enc=<%=luci.util.urlencode(network.encryption)%>" alt="QR code for <%=network.ssid%>">
+<div id="qr-error" class="alert-message error qr-error">QR code failed to load<br><br>Install qrencode package:<br><code>opkg install qrencode</code><br><br><button class="btn cbi-button" onclick="location.reload()">Retry</button></div>
+</div>
+
+<div class="network-info">
+<div class="cbi-value">
+<label class="cbi-value-title">SSID</label>
+<div class="cbi-value-field" style="font-size:1.2em;font-weight:bold"><%=network.ssid%></div>
+</div>
+
+<div class="cbi-value">
+<label class="cbi-value-title">Security</label>
+<div class="cbi-value-field"><%
+  local auth = "Open Network"
+  if network.encryption and (network.encryption:match("psk") or network.encryption:match("sae")) then
+    auth = "WPA Protected"
+  elseif network.encryption and network.encryption:match("wep") then
+    auth = "WEP Protected"
+  end
+%><%=auth%></div>
+</div>
+
+<% if network.key and network.key ~= "" then %>
+<div class="cbi-value">
+<label class="cbi-value-title">Password</label>
+<div class="cbi-value-field">
+<div class="password-controls">
+<span id="pw" data-clear="<%=network.key%>" class="password-field">••••••</span>
+</div>
+<button class="btn cbi-button" id="toggle">Show</button>
+<button class="btn cbi-button cbi-button-apply" id="copy" style="margin-left:8px">Copy</button>
+</div>
+</div>
+<% end %>
+</div>
+
+<div style="margin-top:30px;padding:15px;background:var(--luci-section-bg,#f9f9f9);border:1px solid var(--luci-border-color,#ddd);border-radius:6px;color:var(--luci-text-muted,#666);text-align:center">
+<small>Scan the QR code with your device's camera or WiFi settings to connect automatically.</small>
+</div>
+
+</div>
+</fieldset>
+</div>
+
+<script>
+(function(){
+  // QR code error handling
+  var qrImg = document.getElementById('qr-img');
+  var qrError = document.getElementById('qr-error');
+  
+  if (qrImg) {
+    qrImg.onerror = function() {
+      this.style.display = 'none';
+      if (qrError) qrError.style.display = 'block';
+    };
+  }
+  
+  // Password controls
+  var toggle = document.getElementById('toggle');
+  var copy = document.getElementById('copy');
+  var pw = document.getElementById('pw');
+
+  if (toggle && pw) {
+    toggle.addEventListener('click', function(){ 
+      var clear = pw.getAttribute('data-clear') || ''; 
+      if (!clear) return; 
+      if (pw.getAttribute('data-visible') === '1') { 
+        pw.textContent = '••••••'; 
+        pw.setAttribute('data-visible', '0'); 
+        this.textContent = 'Show'; 
+      } else { 
+        pw.textContent = clear; 
+        pw.setAttribute('data-visible', '1'); 
+        this.textContent = 'Hide'; 
+      }
+    });
+  }
+  
+  if (copy && pw) {
+    copy.addEventListener('click', function(){ 
+      var clear = pw.getAttribute('data-clear') || ''; 
+      if (!clear) return; 
+      if (navigator.clipboard) { 
+        navigator.clipboard.writeText(clear).then(function(){ 
+          alert('Password copied to clipboard'); 
+        }, function(){ 
+          prompt('Copy password:', clear); 
+        }); 
+      } else { 
+        prompt('Copy password:', clear); 
+      }
+    });
+  }
+})();
+</script>
+<%+footer%>
+<script type="text/javascript">L.require('menu-bootstrap')</script>
