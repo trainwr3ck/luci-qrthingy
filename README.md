@@ -121,11 +121,52 @@ A modern LuCI module that generates QR codes for WiFi networks, allowing easy sh
 
 ## Experimental Features
 
-- **Guest QR Generator** - Standalone scripts for public WiFi QR codes (untested)
-- **Static HTML Generation** - Creates files in `/www/guest/` for public access
-- **Cron Integration** - Automated generation via crontab scheduling
+### Guest QR Generator (Untested)
 
-*Note: Guest QR scripts are experimental and require manual installation/testing.*
+Standalone scripts for generating public WiFi QR codes without authentication.
+
+#### Installation
+
+1. **Copy scripts to router**:
+   ```bash
+   scp guest-qr-generator.lua root@router:/usr/local/bin/
+   scp guest-qr-cron.sh root@router:/usr/local/bin/
+   chmod +x /usr/local/bin/guest-qr-*
+   ```
+
+2. **Configure guest network** (edit script):
+   ```lua
+   local GUEST_SSID = "Your-Guest-WiFi"
+   local GUEST_PASSWORD = "your-password"
+   ```
+
+3. **Set up cron job**:
+   ```bash
+   echo "*/5 * * * * /usr/local/bin/guest-qr-cron.sh" >> /etc/crontabs/root
+   /etc/init.d/cron restart
+   ```
+
+4. **Manual generation** (optional):
+   ```bash
+   /usr/bin/lua /usr/local/bin/guest-qr-generator.lua
+   ```
+
+#### Usage
+
+- **Public Access**: `http://your-router/guest/`
+- **No Authentication**: Accessible without admin login
+- **Auto-Updates**: Regenerates every 5 minutes via cron
+- **Static Files**: Creates `/www/guest/index.html` and `/www/guest/qr.svg`
+
+#### Features
+
+- Modern card-based design matching main module
+- QR code + manual connection details
+- Configurable SSID/password in script
+- Logging to `/var/log/guest-qr.log`
+- Fallback when qrencode unavailable
+
+*Note: Scripts are experimental and require manual testing.*
 
 ## Compatibility
 
