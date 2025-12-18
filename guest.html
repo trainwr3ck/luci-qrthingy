@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Guest WiFi</title>
+<style>
+:root{--bg:#f6f8fb;--card:#ffffff;--text:#0b1220;--muted:#5b6b79;--accent:#2466ff}
+@media (prefers-color-scheme: dark){:root{--bg:#0b1220;--card:#0f1720;--text:#e6eef6;--muted:#8ea6c7;--accent:#4da6ff}}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{font-family:Inter,ui-sans-serif,system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue',Arial;padding:20px;background:var(--bg);color:var(--text);display:flex;align-items:center;justify-content:center}
+.container{width:100%;max-width:480px}
+.card{display:flex;flex-direction:column;gap:18px;background:var(--card);border-radius:14px;padding:22px;box-shadow:0 10px 30px rgba(2,6,23,0.06);text-align:center}
+.title{margin:0;font-size:1.5rem;font-weight:600}
+.qr{display:flex;align-items:center;justify-content:center;margin:20px 0}
+.qr img{width:280px;height:280px;max-width:80vw;border-radius:12px;background:#fff;padding:18px;box-shadow:inset 0 0 0 1px rgba(0,0,0,0.04)}
+.info{color:var(--muted);font-size:0.9rem;line-height:1.6}
+</style>
+</head>
+<body>
+<div class="container">
+<div class="card">
+<h1 class="title">Guest WiFi</h1>
+<div class="qr">
+<img src="/cgi-bin/luci/guest" alt="Guest WiFi QR Code">
+</div>
+<div class="info">
+Scan the QR code with your device's camera to connect to the guest WiFi network.
+</div>
+</div>
+</div>
+</body>
+</html>

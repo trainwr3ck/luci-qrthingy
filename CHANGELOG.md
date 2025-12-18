@@ -131,7 +131,15 @@ All notable changes to the LuCI WiFi QR Code Generator will be documented in thi
 - **Added UI Design Section** - Detailed explanation of visual improvements
 - **Updated Compatibility** - Added modern browser requirements
 
+## [0.4.2] - 2025-12-17
+
+### Added
+- **Experimental Guest QR Scripts** - Untested standalone generator for public WiFi QR codes
+- Basic cron integration script
+
 ### Files
 - `luci/controller/admin/wifi_qr.lua` - Main controller with routing and logic
 - `luci/view/admin_wifi_qr.htm` - Network list page template
 - `luci/view/admin_wifi_qr_network.htm` - Individual network QR page template
+- `guest-qr-generator.lua` - Experimental guest QR generator (untested)
+- `guest-qr-cron.sh` - Cron wrapper script (untested)
