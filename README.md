@@ -2,6 +2,8 @@
 
 A modern LuCI module that generates QR codes for WiFi networks, allowing easy sharing and connection to your OpenWrt access points.
 
+**GitHub**: https://github.com/trainwr3ck/luci-qrthingy
+
 ## Features
 
 - **Modern Card-Based UI** - Clean, professional interface with responsive design
