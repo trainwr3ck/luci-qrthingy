@@ -4,14 +4,18 @@ A modern LuCI module that generates QR codes for WiFi networks, allowing easy sh
 
 ## Features
 
-- "Multi-page interface" - Network list with individual QR pages per SSID
-- "Native LuCI integration" - Full menu bar with working dropdown navigation and seamless theme integration
-- "Mobile optimized" - Responsive design with larger QR codes on mobile
-- "Password management" - Show/hide and copy password functionality
-- "Error handling" - Graceful fallbacks and retry options
-- "Security focused" - Admin-only access, CSP headers, input validation
-- "Performance optimized" - 30-second network data caching
-- "Deduplication" - Shows unique networks only (by SSID + password)
+- **Modern Card-Based UI** - Clean, professional interface with responsive design
+- **Multi-page Interface** - Network list with individual QR pages per SSID
+- **Native LuCI Integration** - Full menu bar with working dropdown navigation and seamless theme integration
+- **Security Badges** - Color-coded WPA/WEP/Open indicators for easy identification
+- **Mobile Optimized** - Responsive grid layout that works on all devices
+- **Toast Notifications** - Elegant feedback for user actions
+- **Password Management** - Show/hide and copy password functionality with smooth animations
+- **Dark Mode Support** - Automatic theme detection and styling
+- **Error Handling** - Graceful fallbacks and retry options
+- **Security Focused** - Admin-only access, CSP headers, input validation
+- **Performance Optimized** - 30-second network data caching
+- **Network Deduplication** - Shows unique networks only (by SSID + password)
 
 ## Files
 
@@ -104,9 +108,19 @@ A modern LuCI module that generates QR codes for WiFi networks, allowing easy sh
 - Verify LuCI is running on expected port
 - Check firewall rules if accessing remotely
 
+## UI Design
+
+- **Card-Based Layout** - Modern cards with rounded corners and subtle shadows
+- **Responsive Grid** - Adapts to screen size with optimal spacing
+- **Security Indicators** - Visual badges showing network protection level
+- **Hover Effects** - Smooth animations and transitions
+- **Professional Typography** - Clean fonts with proper hierarchy
+- **Toast Messages** - Non-intrusive notifications for user feedback
+
 ## Compatibility
 
 - **OpenWrt 23.05.5** - Fully tested and compatible
-- **LuCI Bootstrap Theme** - Full integration with dropdown menus
+- **LuCI Bootstrap Theme** - Full integration with native menu system
 - **Dark Mode** - Automatic theme detection and styling
-- **Mobile Responsive** - Optimized for mobile devices
+- **Mobile Responsive** - Optimized card layout for all devices
+- **Modern Browsers** - CSS Grid and modern JavaScript features
