@@ -1,4 +1,4 @@
-# LuCI WiFi QR Code Generator
+# LuCI QR Thingy
 
 A modern LuCI module that generates QR codes for WiFi networks, allowing easy sharing and connection to your OpenWrt access points.
 

@@ -1,6 +1,6 @@
 # Changelog
 
-All notable changes to the LuCI WiFi QR Code Generator will be documented in this file.
+All notable changes to LuCI QR Thingy will be documented in this file.
 
 ## [0.1.0] - 2025-12-17
 
