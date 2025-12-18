@@ -123,6 +123,14 @@ All notable changes to the LuCI WiFi QR Code Generator will be documented in thi
 - Responsive design for mobile and desktop
 - Visual hierarchy and information density
 
+## [0.4.1] - 2024-12-19
+
+### Documentation
+- **Updated README** - Added modern UI features and design descriptions
+- **Enhanced Features List** - Highlighted new visual elements and improvements
+- **Added UI Design Section** - Detailed explanation of visual improvements
+- **Updated Compatibility** - Added modern browser requirements
+
 ### Files
 - `luci/controller/admin/wifi_qr.lua` - Main controller with routing and logic
 - `luci/view/admin_wifi_qr.htm` - Network list page template
