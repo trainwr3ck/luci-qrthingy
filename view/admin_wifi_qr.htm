@@ -1,39 +1,34 @@
 <%+header%>
 <style>
-
-/* Better responsive design */
-@media (max-width: 768px) {
-  .wifi-grid { grid-template-columns: 1fr; gap: 15px; margin: 15px 0; }
-  .wifi-card { padding: 15px; }
-  .wifi-icon { font-size: 2em; }
-}
-
-.wifi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:20px;margin:20px 0}
-.wifi-card{background:#fff;border:1px solid #ddd;border-radius:8px;padding:20px;box-shadow:0 2px 8px rgba(0,0,0,0.1);transition:all 0.2s;text-decoration:none;color:inherit;display:block}
-.wifi-card:hover{transform:translateY(-2px);box-shadow:0 4px 16px rgba(0,0,0,0.15);text-decoration:none;color:inherit}
-.wifi-icon{font-size:2.5em;text-align:center;margin-bottom:15px}
-.wifi-name{font-size:1.3em;font-weight:bold;margin-bottom:8px;text-align:center}
-.wifi-info{text-align:center;color:#666;margin-bottom:15px}
-.wifi-btn{background:#0969da;color:#fff;padding:10px 20px;border-radius:6px;text-align:center;font-weight:500}
-.loading-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:20px;margin:20px 0}
-.loading-card{background:#f6f8fa;border-radius:8px;padding:40px;animation:pulse 1.5s infinite}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.5}}
-[data-darkmode="true"] .wifi-card{background:#1c2128;border-color:#30363d;color:#f0f6fc}
-[data-darkmode="true"] .wifi-info{color:#8b949e}
-
-/* Loading animation improvements */
+.networks-container { margin: 20px 0; }
+.networks-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 18px; }
+.network-card { display: flex; flex-direction: column; background: var(--luci-section-bg, #fff); border-radius: 14px; padding: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); transition: all 0.2s ease; text-decoration: none; color: inherit; }
+.network-card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.12); text-decoration: none; color: inherit; }
+.network-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+.network-icon { font-size: 2.2em; }
+.network-badge { display: inline-block; padding: 4px 8px; border-radius: 999px; background: linear-gradient(90deg, rgba(9,105,218,0.12), rgba(77,166,255,0.08)); color: var(--luci-link-color, #0969da); font-weight: 600; font-size: 0.75rem; }
+.network-name { font-size: 1.2em; font-weight: 600; margin-bottom: 8px; }
+.network-info { color: var(--luci-text-muted, #666); font-size: 0.9rem; margin-bottom: 16px; }
+.network-btn { background: var(--luci-link-color, #0969da); color: #fff; padding: 10px 16px; border-radius: 8px; text-align: center; font-weight: 500; font-size: 0.9rem; border: none; }
+.network-btn:hover { background: #0860ca; transform: translateY(-1px); }
+.loading-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 18px; }
+.loading-card { background: var(--luci-section-bg, #f6f8fa); border-radius: 14px; padding: 40px; animation: pulse 1.5s infinite; }
+@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
 .loading-card:nth-child(1) { animation-delay: 0s; }
 .loading-card:nth-child(2) { animation-delay: 0.2s; }
 .loading-card:nth-child(3) { animation-delay: 0.4s; }
-
-/* Better button styling */
-.wifi-btn:hover { background: #0860ca; transform: translateY(-1px); }
-.wifi-btn:active { transform: translateY(0); }
+.alert-modern { background: var(--luci-section-bg, #fff); border-radius: 14px; padding: 24px; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+.alert-modern h4 { margin: 0 0 8px 0; font-size: 1.1rem; }
+.alert-modern p { margin: 0 0 16px 0; color: var(--luci-text-muted, #666); }
+[data-darkmode="true"] .network-card { background: #1c2128; }
+[data-darkmode="true"] .loading-card { background: #1c2128; }
+[data-darkmode="true"] .alert-modern { background: #1c2128; }
 </style>
 
-<h2>WiFi QR Codes</h2>
 <div class="cbi-map">
-<fieldset class="cbi-section">
+<h2 name="content">WiFi QR Codes</h2>
+
+<div class="networks-container">
 <div id="list">
 <div class="loading-grid">
 <div class="loading-card"></div>
@@ -41,7 +36,8 @@
 <div class="loading-card"></div>
 </div>
 </div>
-</fieldset>
+</div>
+
 </div>
 
 <script>
@@ -53,7 +49,7 @@
       .then(res => res.json())
       .then(nets => {
         if (!nets || !nets.length) { 
-          listEl.innerHTML = '<div class="alert-message warning">No WiFi networks found. Make sure your device has active AP interfaces.</div>'; 
+          listEl.innerHTML = '<div class="alert-modern"><h4>No Networks Found</h4><p>No WiFi networks found. Make sure your device has active AP interfaces configured.</p></div>'; 
           return;
         }
         
@@ -64,11 +60,11 @@
         });
         
         const grid = document.createElement('div');
-        grid.className = 'wifi-grid';
+        grid.className = 'networks-grid';
         
         Object.values(unique).forEach(n => {
           const card = document.createElement('a');
-          card.className = 'wifi-card';
+          card.className = 'network-card';
           card.href = '/cgi-bin/luci/admin/network/wifi_qr/network?ssid=' + encodeURIComponent(n.ssid);
           
           const auth = n.encryption && (n.encryption.match(/psk/) || n.encryption.match(/sae/)) ? 'WPA' : 
@@ -76,10 +72,13 @@
           const icon = n.key ? '🔒' : '📶';
           
           card.innerHTML = 
-            '<div class="wifi-icon">' + icon + '</div>' +
-            '<div class="wifi-name">' + n.ssid + '</div>' +
-            '<div class="wifi-info">' + auth + (n.key ? ' • Protected' : ' • Open Network') + '</div>' +
-            '<div class="wifi-btn">Generate QR Code</div>';
+            '<div class="network-header">' +
+              '<div class="network-icon">' + icon + '</div>' +
+              '<div class="network-badge">' + auth + '</div>' +
+            '</div>' +
+            '<div class="network-name">' + n.ssid + '</div>' +
+            '<div class="network-info">' + (n.key ? 'Protected Network' : 'Open Network') + '</div>' +
+            '<div class="network-btn">Generate QR Code</div>';
           grid.appendChild(card);
         });
         
@@ -87,7 +86,7 @@
         listEl.appendChild(grid);
       })
       .catch(e => { 
-        listEl.innerHTML = '<div class="alert-message error">Failed to load networks: ' + e.message + '<br><button class="btn cbi-button" onclick="location.reload()">Retry</button></div>';
+        listEl.innerHTML = '<div class="alert-modern"><h4>Loading Error</h4><p>Failed to load networks: ' + e.message + '</p><button class="btn cbi-button" onclick="location.reload()">Retry</button></div>';
       });
   }
   

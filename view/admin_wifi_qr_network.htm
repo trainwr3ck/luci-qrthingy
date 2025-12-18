@@ -23,73 +23,91 @@ end
 %>
 <%+header%>
 <style>
-.qr-container { text-align: center; margin: 30px 0; }
-.qr-image { width: 200px; height: 200px; border: 1px solid #ddd; padding: 10px; background: #fff; border-radius: 8px; }
-.qr-error { max-width: 320px; margin: 0 auto; padding: 20px; text-align: center; display: none; }
-.network-info { margin: 20px 0; }
-.password-controls { margin: 10px 0; }
-.password-field { font-family: monospace; font-weight: bold; font-size: 1.1em; }
-@media (max-width: 768px) { .qr-image { width: 150px; height: 150px; } }
+.wifi-card { display: flex; flex-direction: column; gap: 18px; background: var(--luci-section-bg, #fff); border-radius: 14px; padding: 22px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); margin: 20px 0; }
+.wifi-header { display: flex; align-items: center; justify-content: space-between; }
+.wifi-title { margin: 0; font-size: 1.25rem; font-weight: 600; }
+.wifi-badge { display: inline-block; padding: 6px 10px; border-radius: 999px; background: linear-gradient(90deg, rgba(9,105,218,0.12), rgba(77,166,255,0.08)); color: var(--luci-link-color, #0969da); font-weight: 600; font-size: 0.85rem; }
+.wifi-grid { display: flex; flex-direction: column; gap: 18px; }
+.wifi-qr { display: flex; align-items: center; justify-content: center; }
+.wifi-qr img { width: 280px; height: 280px; max-width: 60vw; border-radius: 12px; background: #fff; padding: 18px; box-shadow: inset 0 0 0 1px rgba(0,0,0,0.04); }
+.wifi-info { display: flex; flex-direction: column; gap: 12px; }
+.wifi-field { display: flex; gap: 8px; align-items: center; justify-content: space-between; padding: 8px 0; }
+.wifi-pw { font-weight: 700; font-size: 1.05rem; font-family: monospace; }
+.wifi-controls { display: flex; gap: 8px; }
+.wifi-btn { padding: 8px 12px; border-radius: 8px; border: 1px solid rgba(0,0,0,0.06); background: rgba(0,0,0,0.02); color: var(--luci-text-color, #333); cursor: pointer; font-size: 0.9rem; }
+.wifi-btn-copy { background: var(--luci-link-color, #0969da); color: #fff; border: 0; }
+.wifi-note { color: var(--luci-text-muted, #666); font-size: 0.9rem; margin-top: 6px; }
+.wifi-footer { font-size: 0.85rem; color: var(--luci-text-muted, #666); margin-top: 6px; }
+.wifi-toast { position: fixed; left: 50%; transform: translateX(-50%); bottom: 32px; background: #111; color: #fff; padding: 8px 14px; border-radius: 8px; opacity: 0; pointer-events: none; transition: opacity 0.18s ease; z-index: 1000; }
+.wifi-error { max-width: 320px; margin: 0 auto; padding: 20px; text-align: center; display: none; background: #fee; border: 1px solid #fcc; border-radius: 8px; color: #c33; }
+@media (min-width: 720px) { .wifi-grid { flex-direction: row; } .wifi-qr { flex: 0 0 320px; } .wifi-info { flex: 1; } }
+[data-darkmode="true"] .wifi-card { background: #1c2128; }
+[data-darkmode="true"] .wifi-btn { border-color: rgba(255,255,255,0.06); background: rgba(255,255,255,0.02); color: #f0f6fc; }
+[data-darkmode="true"] .wifi-error { background: #2d1b1b; border-color: #5a2d2d; color: #ff6b6b; }
 </style>
 <div class="cbi-map">
-<fieldset class="cbi-section">
-<h2>Connect to <%=network.ssid%></h2>
-<div class="cbi-section-node">
+<h2 name="content">WiFi QR Code</h2>
 
 <div style="text-align:right;margin-bottom:20px">
 <a href="/cgi-bin/luci/admin/network/wifi_qr/" class="btn cbi-button">← Back to Networks</a>
 </div>
 
-<div class="qr-container">
-<img id="qr-img" class="qr-image" src="/cgi-bin/luci/admin/network/wifi_qr/svg?ssid=<%=luci.util.urlencode(network.ssid)%>&key=<%=luci.util.urlencode(network.key or "")%>&enc=<%=luci.util.urlencode(network.encryption)%>" alt="QR code for <%=network.ssid%>">
-<div id="qr-error" class="alert-message error qr-error">QR code failed to load<br><br>Install qrencode package:<br><code>opkg install qrencode</code><br><br><button class="btn cbi-button" onclick="location.reload()">Retry</button></div>
-</div>
-
-<div class="network-info">
-<div class="cbi-value">
-<label class="cbi-value-title">SSID</label>
-<div class="cbi-value-field" style="font-size:1.2em;font-weight:bold"><%=network.ssid%></div>
-</div>
-
-<div class="cbi-value">
-<label class="cbi-value-title">Security</label>
-<div class="cbi-value-field"><%
-  local auth = "Open Network"
+<div class="wifi-card">
+<div class="wifi-header">
+<div>
+<div class="wifi-title"><%=network.ssid%></div>
+<div class="wifi-badge"><%
+  local auth = "Open"
   if network.encryption and (network.encryption:match("psk") or network.encryption:match("sae")) then
-    auth = "WPA Protected"
+    auth = "WPA"
   elseif network.encryption and network.encryption:match("wep") then
-    auth = "WEP Protected"
+    auth = "WEP"
   end
 %><%=auth%></div>
 </div>
+</div>
 
+<div class="wifi-grid">
+<div class="wifi-qr">
+<img id="qr-img" src="/cgi-bin/luci/admin/network/wifi_qr/svg?ssid=<%=luci.util.urlencode(network.ssid)%>&key=<%=luci.util.urlencode(network.key or "")%>&enc=<%=luci.util.urlencode(network.encryption)%>" alt="QR code for <%=network.ssid%>">
+<div id="qr-error" class="wifi-error">QR code failed to load<br><code>opkg install qrencode</code><br><br><button class="wifi-btn" onclick="location.reload()">Retry</button></div>
+</div>
+
+<div class="wifi-info">
+<div class="wifi-field"><strong>Network</strong><div><%=network.ssid%></div></div>
 <% if network.key and network.key ~= "" then %>
-<div class="cbi-value">
-<label class="cbi-value-title">Password</label>
-<div class="cbi-value-field">
-<div class="password-controls">
-<span id="pw" data-clear="<%=network.key%>" class="password-field">••••••</span>
+<div class="wifi-field"><strong>Password</strong><div class="wifi-pw" id="pw" data-clear="<%=network.key%>">••••••</div></div>
+<div class="wifi-controls">
+<button class="wifi-btn" id="toggle">Show</button>
+<button class="wifi-btn wifi-btn-copy" id="copy">Copy</button>
 </div>
-<button class="btn cbi-button" id="toggle">Show</button>
-<button class="btn cbi-button cbi-button-apply" id="copy" style="margin-left:8px">Copy</button>
-</div>
-</div>
+<% else %>
+<div class="wifi-field"><strong>Password</strong><div>None (Open Network)</div></div>
 <% end %>
+<div class="wifi-note">If your device can't scan the QR code, use the password above.</div>
+<div class="wifi-footer">This page is served from your OpenWrt device. Don't share links publicly.</div>
+</div>
+</div>
 </div>
 
-<div style="margin-top:30px;padding:15px;background:var(--luci-section-bg,#f9f9f9);border:1px solid var(--luci-border-color,#ddd);border-radius:6px;color:var(--luci-text-muted,#666);text-align:center">
-<small>Scan the QR code with your device's camera or WiFi settings to connect automatically.</small>
 </div>
 
-</div>
-</fieldset>
-</div>
+<div id="toast" class="wifi-toast">Copied</div>
 
 <script>
 (function(){
-  // QR code error handling
   var qrImg = document.getElementById('qr-img');
   var qrError = document.getElementById('qr-error');
+  var toggle = document.getElementById('toggle');
+  var copy = document.getElementById('copy');
+  var pw = document.getElementById('pw');
+  var toast = document.getElementById('toast');
+  
+  function showToast(msg) {
+    toast.textContent = msg;
+    toast.style.opacity = 1;
+    setTimeout(function() { toast.style.opacity = 0; }, 1500);
+  }
   
   if (qrImg) {
     qrImg.onerror = function() {
@@ -98,39 +116,34 @@ end
     };
   }
   
-  // Password controls
-  var toggle = document.getElementById('toggle');
-  var copy = document.getElementById('copy');
-  var pw = document.getElementById('pw');
-
   if (toggle && pw) {
-    toggle.addEventListener('click', function(){ 
-      var clear = pw.getAttribute('data-clear') || ''; 
-      if (!clear) return; 
-      if (pw.getAttribute('data-visible') === '1') { 
-        pw.textContent = '••••••'; 
-        pw.setAttribute('data-visible', '0'); 
-        this.textContent = 'Show'; 
-      } else { 
-        pw.textContent = clear; 
-        pw.setAttribute('data-visible', '1'); 
-        this.textContent = 'Hide'; 
+    toggle.addEventListener('click', function(){
+      var clear = pw.getAttribute('data-clear') || '';
+      if (!clear) { alert('Open network (no password)'); return; }
+      if (pw.getAttribute('data-visible') === '1') {
+        pw.textContent = '••••••';
+        pw.setAttribute('data-visible', '0');
+        this.textContent = 'Show';
+      } else {
+        pw.textContent = clear;
+        pw.setAttribute('data-visible', '1');
+        this.textContent = 'Hide';
       }
     });
   }
   
   if (copy && pw) {
-    copy.addEventListener('click', function(){ 
-      var clear = pw.getAttribute('data-clear') || ''; 
-      if (!clear) return; 
-      if (navigator.clipboard) { 
-        navigator.clipboard.writeText(clear).then(function(){ 
-          alert('Password copied to clipboard'); 
-        }, function(){ 
-          prompt('Copy password:', clear); 
-        }); 
-      } else { 
-        prompt('Copy password:', clear); 
+    copy.addEventListener('click', function(){
+      var clear = pw.getAttribute('data-clear') || '';
+      if (!clear) { alert('Open network (no password)'); return; }
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(clear).then(function(){
+          showToast('Password copied');
+        }, function(){
+          showToast('Copy failed');
+        });
+      } else {
+        prompt('Password:', clear);
       }
     });
   }

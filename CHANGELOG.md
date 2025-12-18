@@ -100,6 +100,29 @@ All notable changes to the LuCI WiFi QR Code Generator will be documented in thi
 - Better LuCI integration using standard template() entries
 - Reduced code complexity and maintenance overhead
 
+## [0.4.0] - 2024-12-19
+
+### Changed
+- **Modern UI Redesign** - Complete visual overhaul with card-based design
+- **Improved Layout** - Responsive grid layout with better spacing and typography
+- **Enhanced Network Cards** - Security badges, icons, and hover effects
+- **Better Network View** - Side-by-side QR code and info layout on desktop
+- **Toast Notifications** - Elegant toast messages instead of alerts
+
+### Added
+- Security badges with color-coded WPA/WEP/Open indicators
+- Smooth hover animations and transitions
+- Professional footer with security reminder
+- Better error messages with improved styling
+- Enhanced dark mode support
+
+### Improved
+- Typography with better font weights and sizes
+- Button styling consistent across all pages
+- Card shadows and rounded corners for modern look
+- Responsive design for mobile and desktop
+- Visual hierarchy and information density
+
 ### Files
 - `luci/controller/admin/wifi_qr.lua` - Main controller with routing and logic
 - `luci/view/admin_wifi_qr.htm` - Network list page template

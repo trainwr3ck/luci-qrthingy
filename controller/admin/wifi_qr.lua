@@ -1,7 +1,7 @@
 module("luci.controller.admin.wifi_qr", package.seeall)
 
 function index()
-  entry({"admin", "network", "wifi_qr"}, template("admin_wifi_qr"), _("WiFi QR"), 60)
+  entry({"admin", "network", "wifi_qr"}, template("admin_wifi_qr"), _("WiFi QR"), 60).dependent = false
   entry({"admin", "network", "wifi_qr", "network"}, template("admin_wifi_qr_network"))
   entry({"admin", "network", "wifi_qr", "data"}, call("action_data"))
   entry({"admin", "network", "wifi_qr", "svg"}, call("action_svg"))
