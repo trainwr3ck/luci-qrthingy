@@ -63,53 +63,20 @@ All notable changes to the LuCI WiFi QR Code Generator will be documented in thi
 - **Clean Navigation** - Removed duplicate tabmenu from page body content
 - **Hover Dropdowns** - Changed dropdown behavior from click to hover like native LuCI
 - **Individual Network Pages** - Removed unnecessary navigation tabs from network QR pages
+- **Code Cleanup** - Removed duplicate function definitions in controller
 
 ### Improved
 - Consistent navigation behavior matching native LuCI interface
 - Cleaner page layout without redundant menu elements
 - Better user experience with hover-activated dropdowns
+- Improved QR error handling and password controls
 
 ### Technical Changes
 - Unified menu system across both main and network view templates
 - Added dropdown CSS styling with theme support
 - Implemented proper event handlers for dropdown functionality
-
-### Technical Changes
 - Controller now uses `template()` action instead of `call()` for main page
-- Removed `action_index()` function in favor of direct template rendering
 - Simplified file structure by removing unnecessary CBI model
-
-## [0.2.3] - 2024-12-19
-
-### Refactored
-- **Code Cleanup** - Removed duplicate function definitions in controller
-- **Template Simplification** - Eliminated hardcoded menu HTML in favor of LuCI native integration
-- **JavaScript Optimization** - Simplified menu management and error handling code
-- **CSS Organization** - Consolidated styles and improved maintainability
-
-### Fixed
-- **QR Error Handling** - Improved error display logic for failed QR code generation
-- **Password Controls** - Cleaner implementation of show/hide and copy functionality
-- **Mobile Responsiveness** - Better QR code sizing on mobile devices
-
-### Technical Improvements
-- Removed complex setTimeout-based menu manipulation
-- Simplified fetch error handling with better user feedback
-- Consolidated CSS classes for better maintainability
-- Improved code readability and reduced complexity
-
-## [0.2.4] - 2024-12-19
-
-### Fixed
-- **Dropdown Menus** - Restored working hover dropdown functionality that was accidentally removed during refactoring
-- **Menu Navigation** - Dropdown menus now work properly with mouseover/mouseout events
-- **Theme Support** - Dropdown styling maintains dark mode and theme compatibility
-
-### Restored
-- Minimal dropdown JavaScript for hover functionality
-- CSS styling for dropdown menus with theme variables
-- Consistent dropdown behavior across both main and network pages
-- Proper LuCI context for network pages to enable menu rendering
 
 ## [0.3.0] - 2024-12-19
 
