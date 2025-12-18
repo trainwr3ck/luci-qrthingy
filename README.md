@@ -22,6 +22,8 @@ A modern LuCI module that generates QR codes for WiFi networks, allowing easy sh
 - 'luci/controller/admin/wifi_qr.lua' — Controller with individual pages and SVG generation
 - 'luci/view/admin_wifi_qr.htm' — Main network list page
 - 'luci/view/admin_wifi_qr_network.htm' — Individual network QR page
+- 'guest-qr-generator.lua' — Experimental guest QR generator (untested)
+- 'guest-qr-cron.sh' — Cron wrapper script (untested)
 
 ## Requirements
 
@@ -116,6 +118,14 @@ A modern LuCI module that generates QR codes for WiFi networks, allowing easy sh
 - **Hover Effects** - Smooth animations and transitions
 - **Professional Typography** - Clean fonts with proper hierarchy
 - **Toast Messages** - Non-intrusive notifications for user feedback
+
+## Experimental Features
+
+- **Guest QR Generator** - Standalone scripts for public WiFi QR codes (untested)
+- **Static HTML Generation** - Creates files in `/www/guest/` for public access
+- **Cron Integration** - Automated generation via crontab scheduling
+
+*Note: Guest QR scripts are experimental and require manual installation/testing.*
 
 ## Compatibility
 
