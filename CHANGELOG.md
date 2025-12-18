@@ -2,7 +2,7 @@
 
 All notable changes to the LuCI WiFi QR Code Generator will be documented in this file.
 
-## [0.1.0] - 2024-12-19
+## [0.1.0] - 2025-12-17
 
 ### Added
 - Initial release of LuCI WiFi QR Code Generator
@@ -33,7 +33,7 @@ All notable changes to the LuCI WiFi QR Code Generator will be documented in thi
 - Automatic menu bar integration with proper dropdown functionality
 - Theme-aware styling with CSS variables support
 
-## [0.2.0] - 2024-12-19
+## [0.2.0] - 2025-12-17
 
 ### Fixed
 - **Menu Integration** - Fixed LuCI menu bar not displaying properly
@@ -45,7 +45,7 @@ All notable changes to the LuCI WiFi QR Code Generator will be documented in thi
 - Unused CBI model file that was causing integration issues
 - Manual menu creation code replaced with native LuCI system
 
-## [0.2.1] - 2024-12-19
+## [0.2.1] - 2025-12-17
 
 ### Fixed
 - **Complete Menu Integration** - Both main page and network view now have full dropdown menus
@@ -57,7 +57,7 @@ All notable changes to the LuCI WiFi QR Code Generator will be documented in thi
 - Theme-aware dropdown styling with CSS variables
 - Consistent menu behavior across all plugin pages
 
-## [0.2.2] - 2024-12-19
+## [0.2.2] - 2025-12-17
 
 ### Fixed
 - **Clean Navigation** - Removed duplicate tabmenu from page body content
@@ -78,7 +78,7 @@ All notable changes to the LuCI WiFi QR Code Generator will be documented in thi
 - Controller now uses `template()` action instead of `call()` for main page
 - Simplified file structure by removing unnecessary CBI model
 
-## [0.3.0] - 2024-12-19
+## [0.3.0] - 2025-12-17
 
 ### Changed
 - **Native LuCI Integration** - Replaced custom dropdown code with LuCI's native menu system
@@ -100,7 +100,7 @@ All notable changes to the LuCI WiFi QR Code Generator will be documented in thi
 - Better LuCI integration using standard template() entries
 - Reduced code complexity and maintenance overhead
 
-## [0.4.0] - 2024-12-19
+## [0.4.0] - 2025-12-17
 
 ### Changed
 - **Modern UI Redesign** - Complete visual overhaul with card-based design
@@ -123,7 +123,7 @@ All notable changes to the LuCI WiFi QR Code Generator will be documented in thi
 - Responsive design for mobile and desktop
 - Visual hierarchy and information density
 
-## [0.4.1] - 2024-12-19
+## [0.4.1] - 2025-12-17
 
 ### Documentation
 - **Updated README** - Added modern UI features and design descriptions
