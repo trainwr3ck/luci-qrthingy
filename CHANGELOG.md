@@ -162,6 +162,19 @@ All notable changes to LuCI QR Thingy will be documented in this file.
 - Graceful error handling with pcall for library loading
 - Consistent QR generation across main module and guest scripts
 
+## [0.5.1] - 2025-12-17
+
+### Improved
+- **Guest QR Configuration** - Configurable SSID at top of script for easy customization
+- **UCI Integration** - Automatically pulls password and encryption from OpenWrt config
+- **Error Handling** - Fails fast if configured SSID not found in UCI
+- **No Fallback Passwords** - Requires proper network configuration for security
+
+### Changed
+- Removed hardcoded fallback credentials for better security
+- Script now exits with clear error if SSID not found in UCI config
+- Simplified configuration to single SSID variable
+
 ### Files
 - `luci/controller/admin/wifi_qr.lua` - Main controller with routing and logic
 - `luci/view/admin_wifi_qr.htm` - Network list page template

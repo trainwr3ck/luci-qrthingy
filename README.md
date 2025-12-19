@@ -135,28 +135,21 @@ Standalone scripts for generating public WiFi QR codes without authentication.
 #### Installation
 
 1. **Copy scripts to router**:
-   ```bash
    scp guest-qr-generator.lua root@router:/usr/local/bin/
    scp guest-qr-cron.sh root@router:/usr/local/bin/
    chmod +x /usr/local/bin/guest-qr-*
-   ```
 
 2. **Configure guest network** (edit script):
    ```lua
-   local GUEST_SSID = "Your-Guest-WiFi"
-   local GUEST_PASSWORD = "your-password"
+   local TARGET_GUEST_SSID = "Your-Guest-WiFi"  -- Change this to your guest network SSID
    ```
 
 3. **Set up cron job**:
-   ```bash
    echo "*/5 * * * * /usr/local/bin/guest-qr-cron.sh" >> /etc/crontabs/root
    /etc/init.d/cron restart
-   ```
 
 4. **Manual generation** (optional):
-   ```bash
    /usr/bin/lua /usr/local/bin/guest-qr-generator.lua
-   ```
 
 #### Usage
 
@@ -169,9 +162,10 @@ Standalone scripts for generating public WiFi QR codes without authentication.
 
 - Modern card-based design matching main module
 - QR code + manual connection details
-- Configurable SSID/password in script
+- Configurable SSID with automatic UCI password lookup
 - Logging to `/var/log/guest-qr.log`
-- Fallback when qrencode unavailable
+- luci-lib-uqr and qrencode support with fallback
+- Fail-fast error handling for missing networks
 
 *Note: Scripts are experimental and require manual testing.*
 

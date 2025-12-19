@@ -8,15 +8,47 @@ local uci = require "luci.model.uci".cursor()
 
 -- Configuration
 local GUEST_DIR = "/www/guest"
-local GUEST_SSID = "Guest-WiFi"
-local GUEST_PASSWORD = "welcome123"
+local TARGET_GUEST_SSID = "Guest-WiFi"  -- Change this to your guest network SSID
+
+-- Find specific guest network from UCI configuration
+local function get_guest_network(target_ssid)
+  local guest_ssid, guest_password, guest_encryption = nil, nil, "none"
+  
+  -- Look for the specific SSID in UCI configuration
+  uci:foreach("wireless", "wifi-iface", function(s)
+    if s.ssid and s.ssid == target_ssid and (s.mode == "ap" or s.mode == nil) then
+      guest_ssid = s.ssid
+      guest_password = s.key or ""
+      guest_encryption = s.encryption or "none"
+      return false -- Stop iteration
+    end
+  end)
+  
+  -- Exit if SSID not found
+  if not guest_ssid then
+    print("Error: SSID '" .. target_ssid .. "' not found in UCI configuration")
+    print("Please check /etc/config/wireless or update TARGET_GUEST_SSID")
+    os.exit(1)
+  end
+  
+  return guest_ssid, guest_password, guest_encryption
+end
+
+local GUEST_SSID, GUEST_PASSWORD, GUEST_ENCRYPTION = get_guest_network(TARGET_GUEST_SSID)
 
 -- Create directory if it doesn't exist
 os.execute("mkdir -p " .. GUEST_DIR)
 
 -- Generate QR code SVG
-local function generate_qr_svg(ssid, password)
-  local wifi_data = string.format("WIFI:T:WPA;S:%s;P:%s;;", ssid, password)
+local function generate_qr_svg(ssid, password, encryption)
+  local auth = "nopass"
+  if encryption and (encryption:match("psk") or encryption:match("sae")) then
+    auth = "WPA"
+  elseif encryption and encryption:match("wep") then
+    auth = "WEP"
+  end
+  
+  local wifi_data = string.format("WIFI:T:%s;S:%s;P:%s;;", auth, ssid, password or "")
   
   -- Try luci-lib-uqr first (pure Lua)
   local ok, uqr = pcall(require, "luci.lib.uqr")
@@ -83,7 +115,7 @@ body{font-family:Inter,ui-sans-serif,system-ui,-apple-system,'Segoe UI',Roboto,'
 <div class="container">
 <div class="card">
 <h1 class="title">%s</h1>
-<div class="badge">WPA Protected</div>
+<div class="badge">%s</div>
 <div class="qr">%s</div>
 <div class="info">Scan the QR code with your device's camera to connect automatically.</div>
 <div class="details">
@@ -95,12 +127,14 @@ body{font-family:Inter,ui-sans-serif,system-ui,-apple-system,'Segoe UI',Roboto,'
 </div>
 </body>
 </html>
-]], ssid, ssid, qr_svg, ssid, password, os.date("%%Y-%%m-%%d %%H:%%M"))
+]], ssid, ssid, (GUEST_ENCRYPTION and (GUEST_ENCRYPTION:match("psk") or GUEST_ENCRYPTION:match("sae")) and "WPA Protected" or GUEST_ENCRYPTION and GUEST_ENCRYPTION:match("wep") and "WEP Protected" or "Open Network"), qr_svg, ssid, password, os.date("%%Y-%%m-%%d %%H:%%M"))
 end
 
 -- Main execution
-local qr_svg = generate_qr_svg(GUEST_SSID, GUEST_PASSWORD)
+local qr_svg = generate_qr_svg(GUEST_SSID, GUEST_PASSWORD, GUEST_ENCRYPTION)
 local html_content = generate_html(GUEST_SSID, GUEST_PASSWORD, qr_svg)
+
+print("Using guest network: " .. GUEST_SSID .. " (" .. (GUEST_ENCRYPTION or "none") .. ")")
 
 -- Write HTML file
 local html_file = io.open(GUEST_DIR .. "/index.html", "w")
