@@ -6,7 +6,7 @@ A modern LuCI module that generates QR codes for WiFi networks, allowing easy sh
 
 ## Features
 
-- **Modern Card-Based UI** - Clean, professional interface with responsive design
+- **Clean Interface** - Professional design with responsive layout
 - **Pure Lua QR Generation** - Uses luci-lib-uqr for fast, reliable QR codes without external dependencies
 - **Multi-page Interface** - Network list with individual QR pages per SSID
 - **Native LuCI Integration** - Full menu bar with working dropdown navigation and seamless theme integration
@@ -119,12 +119,11 @@ A modern LuCI module that generates QR codes for WiFi networks, allowing easy sh
 
 ## UI Design
 
-- **Card-Based Layout** - Modern cards with rounded corners and subtle shadows
-- **Responsive Grid** - Adapts to screen size with optimal spacing
+- **Responsive Grid Layout** - Adapts to screen size with optimal spacing
 - **Security Indicators** - Visual badges showing network protection level
-- **Hover Effects** - Smooth animations and transitions
-- **Professional Typography** - Clean fonts with proper hierarchy
-- **Toast Messages** - Non-intrusive notifications for user feedback
+- **Smooth Animations** - Polished transitions and hover effects
+- **Clean Typography** - Readable fonts with proper hierarchy
+- **Toast Notifications** - Non-intrusive feedback messages
 
 ## Experimental Features
 
@@ -160,7 +159,7 @@ Standalone scripts for generating public WiFi QR codes without authentication.
 
 #### Features
 
-- Modern card-based design matching main module
+- Clean design matching main module
 - QR code + manual connection details
 - Configurable SSID with automatic UCI password lookup
 - Logging to `/var/log/guest-qr.log`

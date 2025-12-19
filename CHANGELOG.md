@@ -103,9 +103,9 @@ All notable changes to LuCI QR Thingy will be documented in this file.
 ## [0.4.0] - 2025-12-17
 
 ### Changed
-- **Modern UI Redesign** - Complete visual overhaul with card-based design
+- **UI Redesign** - Complete visual overhaul with responsive grid layout
 - **Improved Layout** - Responsive grid layout with better spacing and typography
-- **Enhanced Network Cards** - Security badges, icons, and hover effects
+- **Enhanced Network Display** - Security badges, icons, and hover effects
 - **Better Network View** - Side-by-side QR code and info layout on desktop
 - **Toast Notifications** - Elegant toast messages instead of alerts
 
@@ -119,7 +119,7 @@ All notable changes to LuCI QR Thingy will be documented in this file.
 ### Improved
 - Typography with better font weights and sizes
 - Button styling consistent across all pages
-- Card shadows and rounded corners for modern look
+- Clean styling with shadows and rounded corners
 - Responsive design for mobile and desktop
 - Visual hierarchy and information density
 
