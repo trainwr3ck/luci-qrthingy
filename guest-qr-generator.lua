@@ -50,7 +50,19 @@ local function generate_qr_svg(ssid, password, encryption)
   
   local wifi_data = string.format("WIFI:T:%s;S:%s;P:%s;;", auth, ssid, password or "")
   
-  -- Try qrencode binary
+  -- Try luci-lib-uqr first (pure Lua)
+  local ok, uqr = pcall(require, "luci.lib.uqr")
+  if ok and uqr then
+    local success, qr_matrix = pcall(uqr.encode, wifi_data)
+    if success and qr_matrix then
+      local svg_data = uqr.svg(qr_matrix, 4)
+      if svg_data then
+        return svg_data
+      end
+    end
+  end
+  
+  -- Fallback to qrencode binary
   local qr_cmd = io.popen('echo "' .. wifi_data .. '" | qrencode -t SVG -m 2 -s 6 -o - 2>/dev/null')
   if qr_cmd then
     local svg_data = qr_cmd:read("*a")
@@ -65,7 +77,7 @@ local function generate_qr_svg(ssid, password, encryption)
 <svg xmlns="http://www.w3.org/2000/svg" width="280" height="280" viewBox="0 0 280 280">
   <rect width="280" height="280" fill="white" stroke="#ddd" stroke-width="2"/>
   <text x="140" y="130" text-anchor="middle" font-family="Arial" font-size="16" fill="black">%s</text>
-  <text x="140" y="150" text-anchor="middle" font-family="Arial" font-size="12" fill="gray">Install qrencode</text>
+  <text x="140" y="150" text-anchor="middle" font-family="Arial" font-size="12" fill="gray">Install luci-lib-uqr or qrencode</text>
 </svg>
 ]], ssid)
 end

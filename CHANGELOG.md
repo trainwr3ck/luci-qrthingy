@@ -175,22 +175,6 @@ All notable changes to LuCI QR Thingy will be documented in this file.
 - Script now exits with clear error if SSID not found in UCI config
 - Simplified configuration to single SSID variable
 
-## [0.5.2] - 2025-12-17
-
-### Removed
-- **luci-lib-uqr Dependency** - Removed all references to luci-lib-uqr package
-
-### Changed
-- **Simplified QR Generation** - Now uses qrencode binary with SVG fallback only
-- **Updated Documentation** - Removed luci-lib-uqr installation instructions
-- **Cleaner Fallback Chain** - qrencode → SVG fallback (removed intermediate step)
-
-### Technical Changes
-- Removed pcall attempts to load luci.lib.uqr
-- Simplified action_svg() function in controller
-- Updated guest generator to use qrencode only
-- Cleaner error messages in fallback SVG
-
 ### Files
 - `luci/controller/admin/wifi_qr.lua` - Main controller with routing and logic
 - `luci/view/admin_wifi_qr.htm` - Network list page template
